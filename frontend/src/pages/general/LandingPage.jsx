@@ -22,7 +22,7 @@ const LandingPage = () => {
   return (
     <div className="landing-page">
       {/* Navbar overlay */}
-      <motion.nav 
+      <motion.nav
         className="landing-nav"
         initial={{ y: -100 }}
         animate={{ y: 0 }}
@@ -41,8 +41,8 @@ const LandingPage = () => {
       <section className="hero-section">
         <div className="hero-bg-overlay"></div>
         <img src="/hero-bg.png" alt="Bite Reel Hero" className="hero-bg-img" />
-        
-        <motion.div 
+
+        <motion.div
           className="hero-content"
           initial="hidden"
           animate="visible"
@@ -63,7 +63,7 @@ const LandingPage = () => {
 
       {/* About Section */}
       <section id="about" className="about-section">
-        <motion.div 
+        <motion.div
           className="about-container"
           initial="hidden"
           whileInView="visible"
@@ -73,8 +73,8 @@ const LandingPage = () => {
           <motion.div className="about-text" variants={fadeUpVariant}>
             <h2>About The Application</h2>
             <p>
-              Bite Reel is an immersive platform bridging the gap between food enthusiasts and culinary creators. 
-              Scroll through endless streams of high-quality food reels, like your favorites, and save recipes to try later. 
+              Bite Reel is an immersive platform bridging the gap between food enthusiasts and culinary creators.
+              Scroll through endless streams of high-quality food reels, like your favorites, and save recipes to try later.
               Using dynamic intersection observers, Bite Reel automatically plays stunning food videography right as it swipes into view!
             </p>
           </motion.div>
@@ -97,7 +97,7 @@ const LandingPage = () => {
 
       {/* Food Partners Testimonials Section */}
       <section id="partners" className="partners-section">
-        <motion.div 
+        <motion.div
           className="partners-header"
           initial="hidden"
           whileInView="visible"
@@ -106,9 +106,10 @@ const LandingPage = () => {
         >
           <h2>Trusted by Top Food Partners</h2>
           <p>See what leading restaurants and culinary creators are saying about Bite Reel.</p>
+          <p style={{ fontSize: '12px', color: '#666' }}>(Note: This is a demo application and does not have real food partners.)</p>
         </motion.div>
 
-        <motion.div 
+        <motion.div
           className="testimonials-grid"
           initial="hidden"
           whileInView="visible"
@@ -135,7 +136,7 @@ const LandingPage = () => {
               delay: 0.6
             }
           ].map((testimonial, idx) => (
-            <motion.div 
+            <motion.div
               key={idx}
               className="testimonial-card"
               variants={fadeUpVariant}
@@ -144,7 +145,7 @@ const LandingPage = () => {
               <p className="quote-text">{testimonial.quote}</p>
               <div className="testimonial-author">
                 <div className="author-avatar">
-                   {testimonial.name.charAt(0)}
+                  {testimonial.name.charAt(0)}
                 </div>
                 <div className="author-info">
                   <h4>{testimonial.name}</h4>
