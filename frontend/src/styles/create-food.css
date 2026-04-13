@@ -1,0 +1,221 @@
+.cf-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: var(--spacing-lg);
+  background-color: var(--bg-main);
+  color: var(--text-main);
+}
+
+.cf-card {
+  width: 100%;
+  max-width: 520px;
+  background-color: var(--bg-card);
+  padding: var(--spacing-xl);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--primary);
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+}
+.cf-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+.cf-title {
+  font-size: var(--font-xl);
+  margin-bottom: var(--spacing-lg);
+  text-align: center;
+  color: var(--text-light);
+  font-weight: 700;
+}
+
+.cf-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.cf-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.cf-form-label {
+  font-size: var(--font-sm);
+  color: var(--text-main);
+  font-weight: 500;
+}
+
+.cf-form-input {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid rgba(10, 147, 150, 0.3);
+  border-radius: var(--border-radius);
+  background-color: var(--bg-main);
+  color: var(--text-light);
+  font-size: var(--font-md);
+  transition: all var(--transition-speed);
+}
+
+.cf-form-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--focus-glow);
+}
+
+.cf-form-textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.cf-upload-container {
+  position: relative;
+  width: 100%;
+}
+
+.cf-form-file {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.cf-upload-area {
+  padding: var(--spacing-xl);
+  border: 2px dashed var(--primary);
+  border-radius: var(--border-radius);
+  background-color: transparent;
+  text-align: center;
+  transition: all var(--transition-speed);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.cf-upload-area:hover, 
+.cf-form-file:focus + .cf-upload-area {
+  border-color: var(--accent);
+  background-color: rgba(148, 210, 189, 0.1);
+  transform: scale(1.02);
+}
+
+.cf-upload-icon {
+  width: 48px;
+  height: 48px;
+  color: var(--accent);
+  margin-bottom: var(--spacing-sm);
+}
+
+.cf-upload-text {
+  font-size: var(--font-md);
+  color: var(--text-light);
+  font-weight: 600;
+}
+
+.cf-upload-hint {
+  font-size: var(--font-sm);
+  color: var(--text-main);
+  opacity: 0.8;
+}
+
+.cf-upload-progress {
+  width: 100%;
+  height: 4px;
+  background-color: var(--bg-main);
+  border-radius: 2px;
+  margin-top: var(--spacing-sm);
+  overflow: hidden;
+  display: none;
+}
+.cf-upload-progress.active {
+  display: block;
+}
+
+.cf-progress-bar {
+  height: 100%;
+  background-color: var(--accent);
+  transition: width 0.3s ease;
+  width: 0;
+}
+
+.cf-preview-container {
+  position: relative;
+  width: 100%;
+  margin-top: var(--spacing-md);
+}
+
+.cf-video-preview {
+  width: 100%;
+  aspect-ratio: 9/16;
+  background-color: var(--bg-main);
+  border-radius: var(--border-radius);
+  object-fit: cover;
+  border: 1px solid var(--primary);
+}
+
+.cf-remove-video {
+  position: absolute;
+  top: var(--spacing-sm);
+  right: var(--spacing-sm);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--danger);
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-speed);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  z-index: 10;
+}
+.cf-remove-video:hover {
+  background-color: white;
+  color: var(--danger);
+  transform: scale(1.1);
+}
+.cf-remove-video svg {
+  width: 18px;
+  height: 18px;
+}
+
+.cf-submit-btn {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: #001219;
+  border: none;
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius);
+  font-size: var(--font-md);
+  cursor: pointer;
+  transition: all var(--transition-speed);
+  font-weight: 700;
+  margin-top: var(--spacing-md);
+  box-shadow: 0 4px 15px rgba(10, 147, 150, 0.3);
+}
+
+.cf-submit-btn:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(10, 147, 150, 0.5);
+}
+
+.cf-submit-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+@media (max-width: 480px) {
+  .cf-container {
+    padding: var(--spacing-sm);
+  }
+  .cf-card {
+    padding: var(--spacing-lg);
+  }
+}

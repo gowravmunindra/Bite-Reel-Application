@@ -1,0 +1,36 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Toastify Customization */
+.Toastify__toast {
+  border-radius: var(--border-radius);
+  font-family: var(--font-family);
+  box-shadow: var(--shadow-soft);
+}
+
+.Toastify__toast--success {
+  background: var(--bg-card);
+  color: var(--accent) !important;
+  border: 1px solid var(--accent);
+}
+.Toastify__toast--success .Toastify__progress-bar {
+  background: var(--accent);
+}
+.Toastify__toast--success svg {
+  fill: var(--accent);
+}
+
+.Toastify__toast--error {
+  background: var(--bg-card);
+  color: var(--danger) !important;
+  border: 1px solid var(--danger);
+}
+.Toastify__toast--error .Toastify__progress-bar {
+  background: var(--danger);
+}
+.Toastify__toast--error svg {
+  fill: var(--danger);
+}

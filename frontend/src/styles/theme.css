@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* Bite Reel Modern Dark Theme */
+  --bg-main: #001219;
+  --bg-card: #005F73;
+  --primary: #0A9396;
+  --accent: #94D2BD;
+  --text-main: #E9D8A6;
+  --text-light: #ffffff;
+  --cta: #EE9B00;
+  --danger: #AE2012;
+
+  --focus-glow: rgba(10, 147, 150, 0.4);
+  --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.3);
+  
+  --border-radius: 12px;
+  --transition-speed: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --font-family: 'Inter', sans-serif;
+
+  /* Legacy variable overrides */
+  --background: var(--bg-main);
+  --text: var(--text-main);
+  --secondary: var(--bg-card);
+  --border: var(--primary);
+  --error: var(--danger);
+  --focus: var(--focus-glow);
+
+  --spacing-xs: 8px;
+  --spacing-sm: 16px;
+  --spacing-md: 24px;
+  --spacing-lg: 32px;
+  --spacing-xl: 48px;
+
+  --font-sm: 0.875rem;
+  --font-md: 1rem;
+  --font-lg: 1.25rem;
+  --font-xl: 1.5rem;
+}
+
+body {
+  font-family: var(--font-family);
+  background: var(--bg-main);
+  background: linear-gradient(135deg, #001219 0%, #002833 50%, #005F73 100%);
+  background-attachment: fixed;
+  color: var(--text-main);
+  min-height: 100vh;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+}

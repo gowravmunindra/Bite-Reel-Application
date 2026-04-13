@@ -1,0 +1,232 @@
+/* Base styles for all reel containers */
+.reels-container, .saved-container {
+  min-height: 100vh;
+  width: 100%;
+  background: var(--bg-main);
+  overflow-y: auto;
+}
+
+/* Full-screen vertical reels style */
+.reels-container {
+  scroll-snap-type: y mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Common reel item styles */
+.reel-item {
+  position: relative;
+  width: 100%;
+  background: var(--bg-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Ensure reels-container inside saved view fills available viewport and uses snap scrolling */
+.saved-container .reels-container {
+  height: calc(100vh - 65px);
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+}
+
+/* Home page specific reel styles */
+.reels-container .reel-item {
+  height: 100vh;
+  scroll-snap-align: start;
+}
+
+.reels-container .reel-video {
+  height: 100vh;
+  width: 100%;
+  object-fit: cover;
+}
+
+/* Base video styles */
+.reel-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  background: var(--bg-main);
+}
+
+/* Common overlay styles */
+.reel-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  color: var(--text-light);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  align-items: flex-start;
+  background: linear-gradient(transparent, #001219 90%);
+  width: 100%;
+}
+
+/* Home specific overlay */
+.reels-container .reel-overlay {
+  padding-bottom: 100px;
+}
+
+/* Saved videos specific overlay */
+.saved-grid .reel-overlay {
+  padding-bottom: 20px;
+  background: linear-gradient(transparent, #001219 95%);
+}
+
+.reel-description {
+  pointer-events: auto;
+  font-size: 16px;
+  line-height: 1.4;
+  max-width: 100%;
+  display: -webkit-box;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+  font-weight: 500;
+  color: var(--text-light);
+}
+
+.reel-visit {
+  align-self: flex-start;
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  background: var(--cta);
+  color: #001219;
+  padding: 10px 20px;
+  border-radius: var(--border-radius);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
+  transition: all var(--transition-speed);
+  box-shadow: 0 2px 8px rgba(238, 155, 0, 0.3);
+  text-transform: uppercase;
+  z-index: 10;
+  position: relative;
+}
+
+.reel-visit:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 4px 15px rgba(238, 155, 0, 0.5);
+}
+
+.reel-description + .reel-visit {
+  margin-top: 6px;
+}
+
+/* Saved Videos Layout */
+.saved-container {
+  min-height: 100vh;
+  background: var(--bg-main);
+  display: flex;
+  flex-direction: column;
+  padding: 20px 20px 80px;
+}
+
+.saved-grid {
+  display: grid;
+  gap: 20px;
+  max-width: 1400px;
+  margin: auto;
+  flex: 1;
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .saved-grid {
+    grid-template-columns: repeat(3, 1fr);
+    padding: 24px;
+  }
+  .reel-item {
+    height: 600px;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .reel-video {
+    height: 100%;
+    border-radius: 16px;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1023px) {
+  .saved-grid {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 20px;
+  }
+  .reel-item {
+    height: 500px;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .reel-video {
+    height: 100%;
+    border-radius: 12px;
+  }
+}
+
+@media (max-width: 640px) {
+  .saved-container {
+    height: calc(100vh - 65px);
+    padding: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: y mandatory;
+  }
+  .saved-grid {
+    display: block;
+    gap: 0;
+  }
+  .saved-grid .reel-item {
+    height: calc(100vh - 65px);
+    border-radius: 0;
+    margin-bottom: 0;
+    scroll-snap-align: start;
+  }
+  .saved-grid .reel-video {
+    height: 100%;
+    border-radius: 0;
+  }
+  .saved-grid .reel-overlay {
+    border-radius: 0;
+    padding: 16px;
+  }
+  .reel-description {
+    font-size: 15px;
+    line-height: 1.3;
+  }
+  .reel-visit {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+  .reels-container .reel-overlay {
+    padding-bottom: 80px;
+  }
+  .reel-interactions {
+    bottom: 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .reels-container {
+    height: calc(100vh - 65px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: y mandatory;
+  }
+  .reels-container .reel-item {
+    height: calc(100vh - 65px);
+    scroll-snap-align: start;
+  }
+  .reels-container .reel-video {
+    height: 100%;
+  }
+}
