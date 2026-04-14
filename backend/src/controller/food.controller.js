@@ -30,24 +30,35 @@ async function deleteFood(req, res){
 }
 
 async function createFood(req, res){
-    console.log(req.foodPartner);
+    try {
+        console.log("Partner:", req.foodPartner?._id);
+        console.log("Body:", req.body);
+        console.log("File:", req.file ? "File present" : "No file");
 
-    console.log(req.body)
-    console.log(req.file)
+        if (!req.file || !req.file.buffer) {
+            return res.status(400).json({ message: "Video file is required." });
+        }
 
-    const fileUploadResult = await storageService.uploadFile(req.file.buffer, uuid());
+        const fileUploadResult = await storageService.uploadFile(req.file.buffer, uuid());
 
-    const foodItem = await foodModel.create({
-        name: req.body.name,
-        description: req.body.description,
-        video: fileUploadResult.url,
-        foodPartner: req.foodPartner._id
-    })
+        const foodItem = await foodModel.create({
+            name: req.body.name,
+            description: req.body.description,
+            video: fileUploadResult.url,
+            foodPartner: req.foodPartner._id
+        });
 
-    res.status(201).json({
-        message: "food created sucessfully",
-        food : foodItem
-    })
+        res.status(201).json({
+            message: "food created sucessfully",
+            food : foodItem
+        });
+    } catch (error) {
+        console.error("Error creating food item:", error);
+        res.status(500).json({ 
+            message: "Internal server error during food creation", 
+            error: error.message 
+        });
+    }
 }
 
 async function getFoodItems(req, res){
