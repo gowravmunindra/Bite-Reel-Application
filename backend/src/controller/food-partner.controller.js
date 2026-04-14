@@ -37,7 +37,9 @@ async function updateProfile(req, res) {
 
     try {
         if (req.file) {
-            const fileUploadResult = await storageService.uploadFile(req.file.buffer, uuid());
+            const originalName = req.file.originalname.replace(/\\s+/g, '_');
+            const fileName = `${uuid()}_${originalName}`;
+            const fileUploadResult = await storageService.uploadFile(req.file.buffer, fileName);
             updateData.profileImage = fileUploadResult.url;
         }
 

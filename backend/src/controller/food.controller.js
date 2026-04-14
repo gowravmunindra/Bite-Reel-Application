@@ -39,7 +39,9 @@ async function createFood(req, res){
             return res.status(400).json({ message: "Video file is required." });
         }
 
-        const fileUploadResult = await storageService.uploadFile(req.file.buffer, uuid());
+        const originalName = req.file.originalname.replace(/\\s+/g, '_');
+        const fileName = `${uuid()}_${originalName}`;
+        const fileUploadResult = await storageService.uploadFile(req.file.buffer, fileName);
 
         const foodItem = await foodModel.create({
             name: req.body.name,
