@@ -42,7 +42,7 @@ const CreateFood = () => {
     dataToSend.append('video', formData.video);
 
     try {
-      const response = await axios.post("http://localhost:3000/api/food", dataToSend, {
+      const response = await axios.post("https://bite-reel-backend.onrender.com/api/food", dataToSend, {
         withCredentials: true
       });
       console.log(response.data);

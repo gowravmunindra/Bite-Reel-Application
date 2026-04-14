@@ -17,7 +17,7 @@ const Home = () => {
   // Fetch videos from backend (uncomment when API is ready)
   useEffect(() => {
     let mounted = true
-    axios.get('http://localhost:3000/api/food', {withCredentials: true})
+    axios.get('https://bite-reel-backend.onrender.com/api/food', {withCredentials: true})
       .then(response => {
         if (mounted) {
           const foodItems = response.data.foodItems;
@@ -46,7 +46,7 @@ const Home = () => {
   async function likeVideo(item) {
     try {
       const response = await axios.post(
-        `http://localhost:3000/api/food/like`,
+        `https://bite-reel-backend.onrender.com/api/food/like`,
         { foodId: item._id},
         { withCredentials: true }
       );
@@ -82,7 +82,7 @@ const Home = () => {
   async function saveVideo(item){
     try {
       const response = await axios.post(
-        `http://localhost:3000/api/food/save`,
+        `https://bite-reel-backend.onrender.com/api/food/save`,
         { foodId: item._id},
         { withCredentials: true }
       );

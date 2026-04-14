@@ -16,7 +16,7 @@ const UserRegister = () => {
     const password = e.target.password.value;
 
     try {
-      const response = await axios.post("http://localhost:3000/api/auth/user/register",{
+      const response = await axios.post("https://bite-reel-backend.onrender.com/api/auth/user/register",{
           fullName: firstName + " " + lastName,
           email,
           password
