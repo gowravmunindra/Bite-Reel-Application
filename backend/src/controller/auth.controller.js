@@ -26,7 +26,7 @@ async function registerUser(req, res){
 
     const token = jwt.sign({id: user._id}, process.env.JWT_SECRET)
 
-    res.cookie('token',token)
+    res.cookie('token',token, { httpOnly: true, secure: true, sameSite: 'none' })
 
     res.status(201).json({
         message: "User registered successfully",
@@ -61,7 +61,7 @@ async function loginUser(req, res){
 
     const token = jwt.sign({id: user._id}, process.env.JWT_SECRET);
 
-    res.cookie('token', token);
+    res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'none' });
 
     return res.status(200).json({
         message : "User logged in successfully",
@@ -74,7 +74,7 @@ async function loginUser(req, res){
 }
 
 function logoutUser(req,res){
-    res.clearCookie('token');
+    res.clearCookie('token', { httpOnly: true, secure: true, sameSite: 'none' });
     res.status(200).json({
         message: "user logged out successfully"
     })
@@ -106,7 +106,7 @@ async function registerFoodPartner(req,res){
 
     const token = jwt.sign({id: foodPartner._id}, process.env.JWT_SECRET)
 
-    res.cookie('token', token)
+    res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'none' })
 
     res.status(201).json({
         message : "food partner registered successfully",
@@ -144,7 +144,7 @@ async function loginFoodPartner(req, res){
 
     const token = jwt.sign({id: foodPartner._id}, process.env.JWT_SECRET);
 
-    res.cookie('token', token);
+    res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'none' });
 
     res.status(200).json({
         message : "Food partner logged in successfully",
@@ -157,7 +157,7 @@ async function loginFoodPartner(req, res){
 }
 
 function logoutFoodPartner(req, res){
-    res.clearCookie('token');
+    res.clearCookie('token', { httpOnly: true, secure: true, sameSite: 'none' });
     res.status(200).json({
         message : "Food partner logged out successfully"
     })
