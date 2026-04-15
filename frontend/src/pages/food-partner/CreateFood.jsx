@@ -54,13 +54,13 @@ const CreateFood = () => {
       const authRes = await axios.get(`${BACKEND_URL}/api/food/imagekit-auth`, {
         withCredentials: true
       });
-      const { token, expire, signature } = authRes.data;
+      const { token, expire, signature, publicKey } = authRes.data;
 
       // Step 2: Upload video directly from the browser to ImageKit
       const ikFormData = new FormData();
       ikFormData.append('file', formData.video);
       ikFormData.append('fileName', `${Date.now()}_${formData.video.name}`);
-      ikFormData.append('publicKey', import.meta.env.VITE_IMAGEKIT_PUBLIC_KEY);
+      ikFormData.append('publicKey', publicKey);
       ikFormData.append('signature', signature);
       ikFormData.append('expire', expire);
       ikFormData.append('token', token);

@@ -9,11 +9,16 @@ const imageKit = new ImageKit({
     urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT,
 });
 
-// Provides short-lived auth params so the frontend can upload directly to ImageKit
+// Provides short-lived auth params so the frontend can upload directly to ImageKit.
+// We also return publicKey so the frontend doesn't need its own env variable.
 function imageKitAuth(req, res) {
     try {
         const authParams = imageKit.getAuthenticationParameters();
-        res.status(200).json(authParams);
+        res.status(200).json({
+            ...authParams,
+            publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
+            urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT,
+        });
     } catch (error) {
         res.status(500).json({ message: 'Failed to generate ImageKit auth token' });
     }
