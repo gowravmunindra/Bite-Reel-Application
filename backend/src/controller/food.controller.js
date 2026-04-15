@@ -48,24 +48,31 @@ async function deleteFood(req, res){
     }
 }
 
-// Frontend now uploads the video directly to ImageKit and sends back the URL.
-// This avoids routing large video files through the Render server (which causes timeouts).
+// Server-side upload: receives the video via multer, uploads to ImageKit from the backend.
+// This is simpler and more reliable than a 3-step client-side flow.
 async function createFood(req, res){
     try {
-        const { name, description, videoUrl } = req.body;
-
-        if (!videoUrl) {
-            return res.status(400).json({ message: "Video URL is required. Please upload a video first." });
+        if (!req.file || !req.file.buffer) {
+            return res.status(400).json({ message: "Video file is required." });
         }
 
-        if (!name || !description) {
+        if (!req.body.name || !req.body.description) {
             return res.status(400).json({ message: "Name and description are required." });
         }
 
+        // Sanitise the filename (replace whitespace with underscores)
+        const safeName = req.file.originalname.replace(/\s+/g, '_');
+        const fileName = `${Date.now()}_${safeName}`;
+
+        const uploadResult = await imageKit.upload({
+            file: req.file.buffer,
+            fileName: fileName,
+        });
+
         const foodItem = await foodModel.create({
-            name,
-            description,
-            video: videoUrl,
+            name: req.body.name,
+            description: req.body.description,
+            video: uploadResult.url,
             foodPartner: req.foodPartner._id
         });
 
@@ -74,7 +81,7 @@ async function createFood(req, res){
             food: foodItem
         });
     } catch (error) {
-        console.error("Error creating food item:", error);
+        console.error("createFood error:", error.message);
         res.status(500).json({ 
             message: "Internal server error during food creation", 
             error: error.message 
@@ -202,7 +209,6 @@ async function getSaveFood(req, res){
     
 }
 module.exports = {
-    imageKitAuth,
     createFood,
     getFoodItems,
     likeFood,

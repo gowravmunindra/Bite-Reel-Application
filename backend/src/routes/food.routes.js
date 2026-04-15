@@ -1,19 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const authMiddleware = require('../middlewares/auth.middleware');
-const foodController = require('../controller/food.controller')
+const foodController = require('../controller/food.controller');
+const multer = require('multer');
 
-// GET /api/food/auth-token
-// Returns short-lived ImageKit auth params for direct client-side upload
-router.get('/imagekit-auth',
-    authMiddleware.authFoodPartnerMiddleware,
-    foodController.imageKitAuth
-);
+const upload = multer({
+    storage: multer.memoryStorage(),
+    limits: { fileSize: 50 * 1024 * 1024 }, // 50 MB safety limit
+});
 
-// POST /api/food  — now accepts JSON { name, description, videoUrl }
-// Video is uploaded directly from the browser to ImageKit; only the URL is sent here.
+// POST /api/food  — multipart/form-data with fields: name, description, video (file)
 router.post('/', 
     authMiddleware.authFoodPartnerMiddleware,
+    upload.single('video'),
     foodController.createFood
 );
 
@@ -35,7 +34,7 @@ router.post('/save',
 router.get('/save',
     authMiddleware.authUserMiddleware,
     foodController.getSaveFood
-)
+);
 
 router.delete('/:id',
     authMiddleware.authFoodPartnerMiddleware,
