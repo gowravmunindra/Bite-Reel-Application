@@ -1,9 +1,23 @@
-const { get } = require('mongoose');
 const foodModel = require('../models/food.model');
-const storageService = require('../services/storage.service');
 const likeModel = require('../models/likes.model');
 const saveModel = require('../models/save.model');
-const {v4 : uuid} = require('uuid');
+const ImageKit = require('imagekit');
+
+const imageKit = new ImageKit({
+    publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
+    privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
+    urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT,
+});
+
+// Provides short-lived auth params so the frontend can upload directly to ImageKit
+function imageKitAuth(req, res) {
+    try {
+        const authParams = imageKit.getAuthenticationParameters();
+        res.status(200).json(authParams);
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to generate ImageKit auth token' });
+    }
+}
 
 async function deleteFood(req, res){
     const { id } = req.params;
@@ -29,30 +43,30 @@ async function deleteFood(req, res){
     }
 }
 
+// Frontend now uploads the video directly to ImageKit and sends back the URL.
+// This avoids routing large video files through the Render server (which causes timeouts).
 async function createFood(req, res){
     try {
-        console.log("Partner:", req.foodPartner?._id);
-        console.log("Body:", req.body);
-        console.log("File:", req.file ? "File present" : "No file");
+        const { name, description, videoUrl } = req.body;
 
-        if (!req.file || !req.file.buffer) {
-            return res.status(400).json({ message: "Video file is required." });
+        if (!videoUrl) {
+            return res.status(400).json({ message: "Video URL is required. Please upload a video first." });
         }
 
-        const originalName = req.file.originalname.replace(/\\s+/g, '_');
-        const fileName = `${uuid()}_${originalName}`;
-        const fileUploadResult = await storageService.uploadFile(req.file.buffer, fileName);
+        if (!name || !description) {
+            return res.status(400).json({ message: "Name and description are required." });
+        }
 
         const foodItem = await foodModel.create({
-            name: req.body.name,
-            description: req.body.description,
-            video: fileUploadResult.url,
+            name,
+            description,
+            video: videoUrl,
             foodPartner: req.foodPartner._id
         });
 
         res.status(201).json({
-            message: "food created sucessfully",
-            food : foodItem
+            message: "Food created successfully",
+            food: foodItem
         });
     } catch (error) {
         console.error("Error creating food item:", error);
@@ -183,6 +197,7 @@ async function getSaveFood(req, res){
     
 }
 module.exports = {
+    imageKitAuth,
     createFood,
     getFoodItems,
     likeFood,

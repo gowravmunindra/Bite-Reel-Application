@@ -4,6 +4,9 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
+const BACKEND_URL = 'https://bite-reel-backend.onrender.com';
+const IMAGEKIT_UPLOAD_URL = 'https://upload.imagekit.io/api/v1/files/upload';
+
 const CreateFood = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -12,6 +15,8 @@ const CreateFood = () => {
     video: null
   });
   const [videoPreview, setVideoPreview] = useState('');
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -28,34 +33,71 @@ const CreateFood = () => {
         ...prev,
         video: file
       }));
-      // Create preview URL
       const url = URL.createObjectURL(file);
       setVideoPreview(url);
+      setUploadProgress(0);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const dataToSend = new FormData();
-    dataToSend.append('name', formData.name);
-    dataToSend.append('description', formData.description);
-    dataToSend.append('video', formData.video);
+
+    if (!formData.video) {
+      toast.error('Please select a video file.');
+      return;
+    }
+
+    setIsUploading(true);
 
     try {
-      const response = await axios.post("https://bite-reel-backend.onrender.com/api/food", dataToSend, {
+      // Step 1: Get short-lived ImageKit auth params from our backend
+      const authRes = await axios.get(`${BACKEND_URL}/api/food/imagekit-auth`, {
         withCredentials: true
       });
+      const { token, expire, signature } = authRes.data;
+
+      // Step 2: Upload video directly from the browser to ImageKit
+      const ikFormData = new FormData();
+      ikFormData.append('file', formData.video);
+      ikFormData.append('fileName', `${Date.now()}_${formData.video.name}`);
+      ikFormData.append('publicKey', import.meta.env.VITE_IMAGEKIT_PUBLIC_KEY);
+      ikFormData.append('signature', signature);
+      ikFormData.append('expire', expire);
+      ikFormData.append('token', token);
+
+      const uploadRes = await axios.post(IMAGEKIT_UPLOAD_URL, ikFormData, {
+        onUploadProgress: (progressEvent) => {
+          const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          setUploadProgress(percent);
+        }
+      });
+
+      const videoUrl = uploadRes.data.url;
+
+      // Step 3: Save food item (only text + URL) to our backend
+      const response = await axios.post(`${BACKEND_URL}/api/food`, {
+        name: formData.name,
+        description: formData.description,
+        videoUrl
+      }, {
+        withCredentials: true
+      });
+
       console.log(response.data);
-      toast.success("Food item created successfully!");
-      
+      toast.success('Food item created successfully!');
+
       const partnerId = localStorage.getItem('partnerId');
       if (partnerId) {
         navigate(`/food-partner/${partnerId}`);
       } else {
-        navigate("/");
+        navigate('/');
       }
     } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to create food item.");
+      console.error(err);
+      const msg = err.response?.data?.message || 'Failed to create food item.';
+      toast.error(msg);
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -113,14 +155,19 @@ const CreateFood = () => {
                   {formData.video ? 'Change video' : 'Upload your video'}
                 </span>
                 <span className="cf-upload-hint">
-                  Click or drag & drop your video here
+                  Click or drag &amp; drop your video here
                 </span>
                 <div className={`cf-upload-progress ${formData.video ? 'active' : ''}`}>
                   <div 
                     className="cf-progress-bar" 
-                    style={{ width: formData.video ? '100%' : '0%' }}
+                    style={{ width: isUploading ? `${uploadProgress}%` : formData.video ? '100%' : '0%' }}
                   />
                 </div>
+                {isUploading && (
+                  <span className="cf-upload-hint" style={{ marginTop: '8px', color: '#4ecdc4' }}>
+                    Uploading... {uploadProgress}%
+                  </span>
+                )}
               </div>
             </div>
             {videoPreview && (
@@ -138,6 +185,7 @@ const CreateFood = () => {
                   onClick={() => {
                     setFormData(prev => ({ ...prev, video: null }));
                     setVideoPreview('');
+                    setUploadProgress(0);
                   }}
                 >
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -149,8 +197,8 @@ const CreateFood = () => {
             )}
           </div>
 
-          <button type="submit" className="cf-submit-btn">
-            Create Food Item
+          <button type="submit" className="cf-submit-btn" disabled={isUploading}>
+            {isUploading ? `Uploading... ${uploadProgress}%` : 'Create Food Item'}
           </button>
         </form>
       </div>
