@@ -15,7 +15,7 @@ const UserLogin = () => {
       const password = e.target.password.value;
 
       try {
-        const response = await axios.post("https://bite-reel-backend.onrender.com/api/auth/user/login",{
+        const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/user/login`,{
             email,
             password
         },{

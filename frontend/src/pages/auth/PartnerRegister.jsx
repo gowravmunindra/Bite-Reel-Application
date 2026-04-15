@@ -18,7 +18,7 @@ const PartnerRegister = () => {
     const address = e.target.address.value;
 
     try {
-      const response = await axios.post("https://bite-reel-backend.onrender.com/api/auth/food-partner/register",{
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/food-partner/register`,{
           name,
           contactName,
           email,

@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-const BACKEND_URL = 'https://bite-reel-backend.onrender.com';
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const CreateFood = () => {
   const navigate = useNavigate();

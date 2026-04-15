@@ -11,7 +11,7 @@ const Reel = ({ item, setVideoRef }) => {
   const handleLike = async () => {
     try {
       const response = await axios.post(
-        `https://bite-reel-backend.onrender.com/api/food/like`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/food/like`,
         { foodId: item._id },
         { withCredentials: true }
       );
@@ -30,7 +30,7 @@ const Reel = ({ item, setVideoRef }) => {
   const handleSave = async () => {
     try {
       const response = await axios.post(
-        `https://bite-reel-backend.onrender.com/api/food/save`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/food/save`,
         { foodId: item._id },
         { withCredentials: true }
       );

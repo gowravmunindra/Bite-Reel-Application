@@ -7,11 +7,11 @@ const cors = require('cors');
 
 // Allowed origins: deployed frontend + local dev servers
 const ALLOWED_ORIGINS = [
-    'https://bite-reel-frontend.onrender.com', // production
+    process.env.FRONTEND_URL,                     // production (from .env)
     'http://localhost:5173',                    // Vite default
     'http://localhost:3000',                    // CRA / alternate
     'http://localhost:4173',                    // Vite preview
-];
+].filter(Boolean);
 
 const app = express();
 app.use(cookieParser());

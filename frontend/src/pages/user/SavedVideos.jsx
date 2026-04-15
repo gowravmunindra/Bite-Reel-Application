@@ -14,7 +14,7 @@ const SavedVideos = () => {
   const containerRef = useRef(null);
 
   useEffect(() => {
-    axios.get('https://bite-reel-backend.onrender.com/api/food/save', { withCredentials: true })
+    axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/food/save`, { withCredentials: true })
       .then((response) => {
         const savedFoods = response.data.savedFoods.map((item) => ({
           _id: item.food._id,

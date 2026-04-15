@@ -23,7 +23,7 @@ export default function Profile() {
   const isOwner = localStorage.getItem('partnerId') === id;
 
   useEffect(() => {
-    axios.get(`https://bite-reel-backend.onrender.com/api/food-partner/${id}`, { withCredentials: true })
+    axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/food-partner/${id}`, { withCredentials: true })
       .then(response => {
         const partner = response.data.foodPartner;
         setProfile(partner);
@@ -40,7 +40,7 @@ export default function Profile() {
 
   const handleDelete = async (videoId) => {
     try {
-      await axios.delete(`https://bite-reel-backend.onrender.com/api/food/${videoId}`, { withCredentials: true });
+      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/food/${videoId}`, { withCredentials: true });
       setVideos(videos.filter(v => v._id !== videoId));
       toast.success("Food item deleted successfully");
     } catch (err) {
@@ -59,7 +59,7 @@ export default function Profile() {
         formData.append('profileImage', editData.profileImage);
       }
 
-      const response = await axios.put(`https://bite-reel-backend.onrender.com/api/food-partner/update`, formData, { withCredentials: true });
+      const response = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/food-partner/update`, formData, { withCredentials: true });
       setProfile(response.data.foodPartner);
       setShowModal(false);
       setImagePreview(null);

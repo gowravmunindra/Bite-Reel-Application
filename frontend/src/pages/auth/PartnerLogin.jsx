@@ -15,7 +15,7 @@ const PartnerLogin = () => {
     const password = e.target.password.value;
 
     try {
-      const response = await axios.post("https://bite-reel-backend.onrender.com/api/auth/food-partner/login",{
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/food-partner/login`,{
         email,
         password
       },{
