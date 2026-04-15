@@ -56,23 +56,32 @@ const CreateFood = () => {
       });
       const { token, expire, signature, publicKey } = authRes.data;
 
-      // Step 2: Upload video directly from the browser to ImageKit
+      // Step 2: Upload video directly from the browser to ImageKit.
+      // We use native fetch (NOT axios) here because axios can corrupt the
+      // multipart/form-data Content-Type boundary, causing ImageKit to return 500.
       const ikFormData = new FormData();
       ikFormData.append('file', formData.video);
       ikFormData.append('fileName', `${Date.now()}_${formData.video.name}`);
       ikFormData.append('publicKey', publicKey);
       ikFormData.append('signature', signature);
-      ikFormData.append('expire', expire);
+      ikFormData.append('expire', String(expire));
       ikFormData.append('token', token);
 
-      const uploadRes = await axios.post(IMAGEKIT_UPLOAD_URL, ikFormData, {
-        onUploadProgress: (progressEvent) => {
-          const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-          setUploadProgress(percent);
-        }
+      const uploadRaw = await fetch(IMAGEKIT_UPLOAD_URL, {
+        method: 'POST',
+        body: ikFormData,
+        // Do NOT set Content-Type header — the browser sets it automatically
+        // with the correct multipart boundary
       });
 
-      const videoUrl = uploadRes.data.url;
+      if (!uploadRaw.ok) {
+        const errText = await uploadRaw.text();
+        console.error('ImageKit upload failed:', errText);
+        throw new Error(`ImageKit upload failed (${uploadRaw.status}): ${errText}`);
+      }
+
+      const uploadResult = await uploadRaw.json();
+      const videoUrl = uploadResult.url;
 
       // Step 3: Save food item (only text + URL) to our backend
       const response = await axios.post(`${BACKEND_URL}/api/food`, {
